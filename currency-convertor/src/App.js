@@ -23,18 +23,21 @@ function App() {
     toAmount = amount;
   }
 
+  async function fetchData() {
+    const response = await fetch(URL);
+    const data = await response.json();
+    console.log(data.conversion_rates);
+
+    const currencyNames = Object.keys(data.conversion_rates);
+    const currencyValue = Object.values(data.conversion_rates);
+    setCurrencyOptions([...currencyNames]);
+    setFromCurrency(currencyNames[0]);
+    setExchangeRate(currencyValue[1]);
+    setToCurrency(currencyNames[1]);
+  }
+
   useEffect(() => {
-    fetch(URL).then((response) => {
-      response.json().then((data) => {
-        console.log(data.conversion_rates);
-        const currencyNames = Object.keys(data.conversion_rates);
-        const currencyValue = Object.values(data.conversion_rates);
-        setCurrencyOptions([...currencyNames]);
-        setFromCurrency(currencyNames[0]);
-        setExchangeRate(currencyValue[1]);
-        setToCurrency(currencyNames[1]);
-      });
-    });
+    fetchData();
   }, []);
 
   useEffect(() => {
